@@ -50,6 +50,18 @@ class ApiController < ApplicationController
       render json: @group
     end
 
+    def edit_group_information
+      #editables: team_name, team_image, team_link, video_link, description, contact_phone, contact_email, challenge_id
+      submitted = {}
+      effected_keys = ["id", "team_name", "team_image", "team_link", "video_link", "description", "contact_phone", "contact_email", "challenge_id"]
+      params.each do |key, val|
+        if(effected_keys.include? key)
+          submitted[key] = val
+        end
+      end
+      render json: submitted
+    end
+
     private
 
     def check_key
