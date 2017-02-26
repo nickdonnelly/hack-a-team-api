@@ -1,6 +1,7 @@
 class ApiController < ApplicationController
 
 	before_action :check_key
+  before_action :check_valid_login_ident
 
     def unknown
         render json: "[0a] Unknown API endpoint."
@@ -82,6 +83,14 @@ class ApiController < ApplicationController
     	badkey()
       end
       true # the key is valid.
+    end
+
+    def check_valid_login_ident
+      if params[:login_identifier].nil?
+        nologin()
+      else
+        # TODO: Check validity of login ident
+      end
     end
 
     def key_valid(key) # TODO: implement this
