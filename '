@@ -53,24 +53,13 @@ class ApiController < ApplicationController
     def edit_group_information
       #editables: team_name, team_image, team_link, video_link, description, contact_phone, contact_email, challenge_id
       submitted = {}
-      effected_keys = ["id", "team_name", "team_image", "team_link", "video_link", "description", "contact_phone", "contact_email", "challenge_id"]
+      effected_keys = ["team_name", "team_image", "team_link", "video_link", "description", "contact_phone", "contact_email", "challenge_id"]
       params.each do |key, val|
         if(effected_keys.include? key)
           submitted[key] = val
         end
       end
-      if submitted[:id].nil? then
-        badparams("id") 
-      else
-        @team = Team.find(submitted[:id])
-        submitted.each do |key, val|
-          @team[key] = val
-        end
-        render json: submitted
-
-        
-
-      end
+      render json: submitted
     end
 
     private
@@ -87,12 +76,5 @@ class ApiController < ApplicationController
     def key_valid(key) # TODO: implement this
       true
     end
-
-    def team_params(:params)
-      params.require(:team).permit(:team_name, :team_image, :team_link, :contact_email, :contact_phone, :members, :video_link, :description, :challenge_id)
-    end
-
-
-
     
 end
