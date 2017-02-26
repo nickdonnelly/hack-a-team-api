@@ -48,7 +48,7 @@ class ApiController < ApplicationController
 
     def get_group_by_id
       if params[:groupid].nil?
-        badparams(groupid)
+        badparams("groupid")
       end
       gid = params[:groupid].to_i
       @group = Team.find(gid)

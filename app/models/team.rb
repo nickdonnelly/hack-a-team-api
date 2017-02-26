@@ -11,7 +11,7 @@ class Team < ApplicationRecord
   validates :contact_email, presence: true
   validates :contact_phone, presence: true
   validates :members, presence: true, length: { maximum: 5 }
-
+  # TODO: regex validations for each of these fields.
 
   private
 
