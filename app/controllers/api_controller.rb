@@ -2,6 +2,7 @@ class ApiController < ApplicationController
 
 	before_action :check_key
   before_action :check_valid_login_ident
+  skip_before_action :check_valid_login_ident, only: [:login_token_request]
 
     def unknown
       render json: "[0a] Unknown API endpoint."
@@ -24,6 +25,16 @@ class ApiController < ApplicationController
         render json: "[100] Bad parameter for " + param + ". Check types."
       else
         render json: "[100] Bad parameter. Check types."
+      end
+    end
+
+    def login_token_request
+      if params[:identifier].nil? or params[:apikey].nil? then
+        badparams("identifier or apikey")
+      else
+        # temp
+        render json: params
+        # TODO
       end
     end
 
@@ -56,7 +67,6 @@ class ApiController < ApplicationController
     end
 
     def edit_group_information
-      #editables: team_name, team_image, team_link, video_link, description, contact_phone, contact_email, challenge_id
       submitted = {}
       effected_keys = ["id", "team_name", "team_image", "team_link", "video_link", "description", "contact_phone", "contact_email", "challenge_id"]
       params.each do |key, val|
@@ -64,17 +74,18 @@ class ApiController < ApplicationController
           submitted[key] = val
         end
       end
-      if submitted[:id].nil? then
+      if submitted["id"].nil? then
         badparams("id") 
       else
-        @team = Team.find(submitted[:id])
-        submitted.each do |key, val|
-          @team[key] = val
+        @team = Team.find_by_id(submitted["id"])
+        if !(@team.nil?)
+          submitted.each do |key, val|
+           @team[key] = val
+          end
+          render json: submitted
+        else
+          render json: {error: "[102] Record not found."}
         end
-        render json: submitted
-
-        
-
       end
     end
 
@@ -94,6 +105,11 @@ class ApiController < ApplicationController
         nologin()
       else
         # TODO: Check validity of login ident
+        @user = User.find_by(login_identifier: params[:login_identifier])
+        if @user.nil? then
+          err = {error: "[900] Bad login identifier. Authentication failed."}
+          render json: err
+        end
       end
     end
 

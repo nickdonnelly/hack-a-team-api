@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       get '/getGroupById' => 'api#get_group_by_id'
       # DONT FORGET TO CHANGE THE BELOW TO POST INSTEAD OF GET
       get '/editGroupById' => 'api#edit_group_information'
+
+      get '/requestLoginToken' => 'api#login_token_request'
       get '/test' => 'api#badparams'
     end
   end
