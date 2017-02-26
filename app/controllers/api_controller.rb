@@ -4,11 +4,15 @@ class ApiController < ApplicationController
   before_action :check_valid_login_ident
 
     def unknown
-        render json: "[0a] Unknown API endpoint."
+      render json: "[0a] Unknown API endpoint."
     end
 
     def nokey
-        render json: "[0b] No API key provided."
+      render json: "[0b] No API key provided."
+    end
+
+    def nologin
+      render json: "[0d] No login credentials provided."
     end
 
     def badkey
@@ -97,7 +101,7 @@ class ApiController < ApplicationController
       true
     end
 
-    def team_params(:params)
+    def team_params(params)
       params.require(:team).permit(:team_name, :team_image, :team_link, :contact_email, :contact_phone, :members, :video_link, :description, :challenge_id)
     end
 
