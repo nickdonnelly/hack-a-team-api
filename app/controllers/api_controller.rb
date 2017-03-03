@@ -80,8 +80,11 @@ class ApiController < ApplicationController
         @team = Team.find_by_id(submitted["id"])
         if !(@team.nil?)
           submitted.each do |key, val|
-           @team[key] = val
+            if key != "id" # dont edit the id's, this will throw an activerecord exception
+              @team[key] = val
+            end
           end
+          @team.save
           render json: submitted
         else
           render json: {error: "[102] Record not found."}
@@ -93,9 +96,9 @@ class ApiController < ApplicationController
 
     def check_key
       if params[:apikey].nil?
-    	nokey()
+    	  nokey()
       elsif !key_valid(params[:apikey])
-    	badkey()
+    	  badkey()
       end
       true # the key is valid.
     end
@@ -114,10 +117,16 @@ class ApiController < ApplicationController
     end
 
     def key_valid(key) # TODO: implement this
-      true
+      @k = Key.find_by(:key => key)
+      if @k.nil?
+        false
+      else
+        true
+      end
     end
 
     def team_params(params)
+      # DO NOT ADD ID TO THIS LIST.
       params.require(:team).permit(:team_name, :team_image, :team_link, :contact_email, :contact_phone, :members, :video_link, :description, :challenge_id)
     end
 
