@@ -12,7 +12,7 @@ namespace :database_init do
       u.email = "test@example.com"
       u.login_identifier = SecureRandom.hex
       u.phone = "123123123"
-      u.team_id = prng.rand(1..50)
+      u.team_id = prng.rand(1..20)
       u.social_facebook = u.first_name + "_" + u.last_name
       u.social_twitter = u.first_name + "_" + u.last_name
       u.social_linkedin = u.first_name + "_" + u.last_name
