@@ -1,30 +1,36 @@
 class ApiController < ApplicationController
 
+  before_action :fix_headers
 	before_action :check_key
   before_action :check_valid_login_ident
   skip_before_action :check_valid_login_ident, only: [:login_token_request]
 
+  def fix_headers
+    headers["Access-Control-Allow-Origin"] = "*"
+    headers["Access-Control-Request-Method"] = "*"
+  end
+
     def unknown
-      render json: "[0a] Unknown API endpoint."
+      render json: {error: "[0a] Unknown API endpoint."}
     end
 
     def nokey
-      render json: "[0b] No API key provided."
+      render json: {error: "[0b] No API key provided."}
     end
 
     def nologin
-      render json: "[0d] No login credentials provided."
+      render json: {error: "[0d] No login credentials provided."}
     end
 
     def badkey
-        render json: "[0c] Invalid API key provided."
+        render json: {error: "[0c] Invalid API key provided."}
     end
 
     def badparams(param="")
       if(param != "")
-        render json: "[100] Bad parameter for " + param + ". Check types."
+        render json: {error: "[100] Bad parameter for " + param + ". Check types."}
       else
-        render json: "[100] Bad parameter. Check types."
+        render json: {error: "[100] Bad parameter. Check types."}
       end
     end
 
@@ -90,6 +96,42 @@ class ApiController < ApplicationController
           render json: {error: "[102] Record not found."}
         end
       end
+    end
+
+    # Returns a JSON object containing a single user.
+    def get_user_by_id
+      if params[:uid].nil?
+        badparams("uid")
+      else
+        @u = User.find(params[:uid])
+        if @u.nil?
+          render json: {erro: "[102] Record not found."}
+        else
+          render json: @u
+        end
+      end
+    end
+
+    # Returns a JSON object containing a list of users.
+    # Input should be a list delimited by commas with no spaces.
+    def get_user_by_id_list
+      @ulist = []
+      if params[:uids].nil?
+        badparams("uids")
+      else
+        params[:uids].split(",").each do |item|
+          u = User.find(item)
+          if !(u.nil?)
+            @ulist << u
+          end
+
+        end
+        render json: @ulist
+      end
+    end
+
+    def edit_user_by_id
+       # TODO
     end
 
     private
