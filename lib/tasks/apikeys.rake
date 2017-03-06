@@ -1,5 +1,5 @@
 namespace :apikeys do
-  desc "TODO"
+  desc "Issues an api key with global privileges."
   task issue_key: :environment do
   	@key = Key.new
   	@key.key = SecureRandom.hex #built into ruby

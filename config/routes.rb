@@ -15,7 +15,6 @@ Rails.application.routes.draw do
       get '/editUser' => 'api#edit_user_by_id'
 
       get '/requestLoginToken' => 'api#login_token_request'
-      get '/test' => 'api#badparams'
     end
   end
 end

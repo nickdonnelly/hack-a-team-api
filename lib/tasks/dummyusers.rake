@@ -1,5 +1,5 @@
 namespace :database_init do
-  names = ["Adella", "Leon", "Marcelene", "Florentina", "Nelle","Mittie  ", "Germaine  ","Kurt","Jalisa  ","Delpha  "]
+  names = ["Adella", "Leon", "Marcelene", "Florentina", "Nelle","Mittie", "Germaine","Kurt","Jalisa","Delpha"]
 
 
 
@@ -16,7 +16,7 @@ namespace :database_init do
       u.social_facebook = u.first_name + "_" + u.last_name
       u.social_twitter = u.first_name + "_" + u.last_name
       u.social_linkedin = u.first_name + "_" + u.last_name
-      u.description = "Filler description text. Lorem ipsum dolor sit amet consectitur bla bla bla."
+      u.description = "Filler description text. Lorem ipsum dolor sit amet consectitur bla bla bla." + SecureRandom.hex
       u.save!
 
     end

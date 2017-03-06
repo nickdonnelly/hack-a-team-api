@@ -105,7 +105,7 @@ class ApiController < ApplicationController
       else
         @u = User.find(params[:uid])
         if @u.nil?
-          render json: {erro: "[102] Record not found."}
+          render json: {error: "[102] Record not found."}
         else
           render json: @u
         end
