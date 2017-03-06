@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       get '/getUserById' => 'api#get_user_by_id'
       get '/getUsersByIds' => 'api#get_user_by_id_list'
       get '/editUser' => 'api#edit_user_by_id'
+      post '/registerNewUser' => 'api#register_new_user'
 
       get '/requestLoginToken' => 'api#login_token_request'
     end

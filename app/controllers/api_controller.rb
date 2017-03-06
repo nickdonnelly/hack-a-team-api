@@ -132,7 +132,34 @@ class ApiController < ApplicationController
     end
 
     def edit_user_by_id
-       # TODO
+       submitted = {}
+      effected_keys = ["id", "email", "description", "profile_image", "social_facebook", "social_linkedin", "social_twitter", "first_name", "last_name", "phone"]
+      params.each do |key, val|
+        if(effected_keys.include? key)
+          submitted[key] = val
+        end
+      end
+      if submitted["id"].nil? then
+        badparams("id") 
+      else
+        @user = User.find_by_id(submitted["id"])
+        if !(@user.nil?)
+          submitted.each do |key, val|
+            if key != "id" # dont edit the id's, this will throw an activerecord exception
+              @user[key] = val
+            end
+          end
+          @user.save
+          render json: submitted
+        else
+          render json: {error: "[102] Record not found."}
+        end
+      end
+
+    end
+
+    def register_new_user
+
     end
 
     private
@@ -171,6 +198,10 @@ class ApiController < ApplicationController
     def team_params(params)
       # DO NOT ADD ID TO THIS LIST.
       params.require(:team).permit(:team_name, :team_image, :team_link, :contact_email, :contact_phone, :members, :video_link, :description, :challenge_id)
+    end
+
+    def user_params(params)
+      params.require(:user).permit(:first_name, :last_name, :phone, :team_id, :email, :description, :profile_image, :social_facebook, :social_linked, :social_twitter, :first_login)
     end
 
 
