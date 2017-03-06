@@ -66,10 +66,11 @@ class ApiController < ApplicationController
     def get_group_by_id
       if params[:groupid].nil?
         badparams("groupid")
+      else
+        gid = params[:groupid].to_i
+        @group = Team.find(gid)
+        render json: @group
       end
-      gid = params[:groupid].to_i
-      @group = Team.find(gid)
-      render json: @group
     end
 
     def edit_group_information
