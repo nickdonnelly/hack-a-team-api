@@ -195,7 +195,7 @@ class ApiController < ApplicationController
         new_team.invite_link = SecureRandom.hex
         new_team.team_link = ""
         new_team.video_link = ""
-        new_team.descripton = ""
+        new_team.description = ""
         new_team.contact_phone = ""
         new_team.challenge_id = -1
         if new_team.save
