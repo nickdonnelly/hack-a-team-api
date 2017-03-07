@@ -198,11 +198,17 @@ class ApiController < ApplicationController
         new_team.description = ""
         new_team.contact_phone = ""
         new_team.challenge_id = -1
+        begin
+        
         if new_team.save
           render json: {team_id: new_team.id, invite_link: new_team.invite_link}
         else
           render json: {error: "[901] Record save failed. Verify parameters are correct."}
         end
+        rescue ActiveRecord::RecordInvalid => invalid
+          render json: invalid.record.errors
+        end
+
 
       end
     end
