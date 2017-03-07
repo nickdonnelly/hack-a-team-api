@@ -1,5 +1,6 @@
 class ApiController < ApplicationController
 
+  protect_from_forgery with: :null_session
   before_action :fix_headers
 	before_action :check_key
   before_action :check_valid_login_ident
