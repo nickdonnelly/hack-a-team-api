@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post '/registerNewUser' => 'api#register_new_user'
       post '/createTeam' => 'api#create_team'
 
+      get '/getChallenges' => 'api#get_challenges'
       get '/requestLoginToken' => 'api#login_token_request'
     end
   end

@@ -49,6 +49,10 @@ class ApiController < ApplicationController
       end
     end
 
+    def get_challenges
+      render json: Challenge.all
+    end
+
     def get_group_list
       @offset = -1
       @limit = -1
