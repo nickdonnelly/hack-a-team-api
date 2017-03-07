@@ -161,33 +161,45 @@ class ApiController < ApplicationController
     end
 
     def register_new_user
-      required_params = ["first_name", "last_name", "email", "phone"]
-      new_user = User.new
-      new_user.first_name = params["first_name"]
-      new_user.last_name = params["last_name"]
-      new_user.phone = params["phone"]
-      new_user.email = params["email"]
-      new_user.login_identifier = SecureRandom.hex
-      new_user.save
-
-      render json: {login_identifier: u.login_identifier, user_id: u.id}
+      # required_params = ["first_name", "last_name", "email", "phone"]
+      if params["first_name"].nil? or params["last_name"].nil? or params["email"].nil? or params["phone"].nil? 
+        badparams()
+      else
+        new_user = User.new
+        new_user.first_name = params["first_name"]
+        new_user.last_name = params["last_name"]
+        new_user.phone = params["phone"]
+        new_user.email = params["email"]
+        new_user.login_identifier = SecureRandom.hex
+        if new_user.save
+          render json: {login_identifier: u.login_identifier, user_id: u.id}
+        else
+          render json: {error: "[901] Record save failed. Verify parameters are correct."}
+        end
+      end
     end
 
 
     def create_team
-      required_params = ["team_name", "contact_email", "team_img"]
-      creator_user = User.find_by(login_identifier: params[:login_identifier])
-      new_team = Team.new
-      new_team.team_name = params["team_name"]
-      new_team.contact_email = params["contact_email"]
-      new_team.team_img = params["team_img"]
-      new_team.creator = creator_user.id
-      new_team.members = [creator_user.id]
-      new_team.invite_link = SecureRandom.hex
-      new_team.save
+      # required_params = ["team_name", "contact_email", "team_img"]
+      if params["team_name"].nil? or params["contact_email"].nil? or params["team_img"].nil? 
+        badparams()
+      else
+        creator_user = User.find_by(login_identifier: params[:login_identifier])
+        new_team = Team.new
+        new_team.team_name = params["team_name"]
+        new_team.contact_email = params["contact_email"]
+        new_team.team_img = params["team_img"]
+        new_team.creator = creator_user.id
+        new_team.members = [creator_user.id]
+        new_team.invite_link = SecureRandom.hex
+        if new_team.save
+          render json: {team_id: new_team.id, invite_link: new_team.invite_link}
+        else
+          render json: {error: "[901] Record save failed. Verify parameters are correct."}
+        end
 
-      render json: {team_id: new_team.id, invite_link: new_team.invite_link}
-
+      end
     end
 
     private
