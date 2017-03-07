@@ -33,6 +33,7 @@ namespace :database_init do
       t.video_link = "http://youtube.com/"
       t.description = "Filler description text. Lorem ipsum dolor sit amet consectitur bla"
       t.contact_phone = "123123123"
+      t.invite_link = SecureRandom.hex
       t.challenge_id = prng.rand(1..3)
       t.contact_email = "team_email@example.com"
       t.creator = prng.rand(1..(User.count))

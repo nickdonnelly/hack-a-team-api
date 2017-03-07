@@ -9,11 +9,12 @@ Rails.application.routes.draw do
       get '/getGroupList' => 'api#get_group_list'
       get '/getGroupById' => 'api#get_group_by_id'
       # DONT FORGET TO CHANGE THE BELOW TO POST INSTEAD OF GET
-      get '/editGroupById' => 'api#edit_group_information'
+      post '/editGroupById' => 'api#edit_group_information'
       get '/getUserById' => 'api#get_user_by_id'
       get '/getUsersByIds' => 'api#get_user_by_id_list'
-      get '/editUser' => 'api#edit_user_by_id'
+      post '/editUser' => 'api#edit_user_by_id'
       post '/registerNewUser' => 'api#register_new_user'
+      post '/createTeam' => 'api#create_team'
 
       get '/requestLoginToken' => 'api#login_token_request'
     end

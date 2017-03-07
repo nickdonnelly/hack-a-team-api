@@ -34,22 +34,23 @@ class ApiController < ApplicationController
       end
     end
 
+    # Not necessarily correct
     def login_token_request
-      if params[:identifier].nil? or params[:apikey].nil? then
+      if params[:login_identifier].nil? or params[:apikey].nil? then
         badparams("identifier or apikey")
       else
-        # temp
-        render json: params
-        # TODO
+        u = User.find_by(login_identifier: params[:login_identifier])
+        if u.nil? 
+          render json: {error: "[900] Bad login identifier. Authentication failed."}
+        else
+          render json: u
+        end
       end
     end
 
     def get_group_list
-      # key checks are implicit.
-      @challengeid = -1
       @offset = -1
       @limit = -1
-      (!params[:challengeid].nil?) ? @challengeid = params[:challengeid].to_i : @challengeid = -1
       (!params[:offset].nil?) ? @offset = params[:offset].to_i : @offset = -1
       (!params[:limit].nil?) ? @limit = params[:limit].to_i : @limit = 9999999999
       
@@ -159,6 +160,32 @@ class ApiController < ApplicationController
     end
 
     def register_new_user
+      required_params = ["first_name", "last_name", "email", "phone"]
+      new_user = User.new
+      new_user.first_name = params["first_name"]
+      new_user.last_name = params["last_name"]
+      new_user.phone = params["phone"]
+      new_user.email = params["email"]
+      new_user.login_identifier = SecureRandom.hex
+      new_user.save
+
+      render json: {login_identifier: u.login_identifier, user_id: u.id}
+    end
+
+
+    def create_team
+      required_params = ["team_name", "contact_email", "team_img"]
+      creator_user = User.find_by(login_identifier: params[:login_identifier])
+      new_team = Team.new
+      new_team.team_name = params["team_name"]
+      new_team.contact_email = params["contact_email"]
+      new_team.team_img = params["team_img"]
+      new_team.creator = creator_user.id
+      new_team.members = [creator_user.id]
+      new_team.invite_link = SecureRandom.hex
+      new_team.save
+
+      render json: {team_id: new_team.id, invite_link: new_team.invite_link}
 
     end
 
@@ -177,7 +204,6 @@ class ApiController < ApplicationController
       if params[:login_identifier].nil?
         nologin()
       else
-        # TODO: Check validity of login ident
         @user = User.find_by(login_identifier: params[:login_identifier])
         if @user.nil? then
           err = {error: "[900] Bad login identifier. Authentication failed."}
