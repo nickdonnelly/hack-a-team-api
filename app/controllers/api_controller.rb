@@ -106,7 +106,7 @@ class ApiController < ApplicationController
       if params[:uid].nil?
         badparams("uid")
       else
-        @u = User.find(params[:uid])
+        @u = User.find_by_id(params[:uid])
         if @u.nil?
           render json: {error: "[102] Record not found."}
         else
@@ -134,7 +134,7 @@ class ApiController < ApplicationController
     end
 
     def edit_user_by_id
-       submitted = {}
+      submitted = {}
       effected_keys = ["id", "email", "description", "profile_image", "social_facebook", "social_linkedin", "social_twitter", "first_name", "last_name", "phone"]
       params.each do |key, val|
         if(effected_keys.include? key)
@@ -198,17 +198,12 @@ class ApiController < ApplicationController
         new_team.description = ""
         new_team.contact_phone = ""
         new_team.challenge_id = -1
-        begin
         
-        if new_team.save!
+        if new_team.save
           render json: {team_id: new_team.id, invite_link: new_team.invite_link}
         else
           render json: {error: "[901] Record save failed. Verify parameters are correct."}
         end
-        rescue ActiveRecord::RecordInvalid => invalid
-          render json: invalid.record.errors
-        end
-
 
       end
     end
