@@ -203,7 +203,8 @@ class ApiController < ApplicationController
         if new_team.save
           render json: {team_id: new_team.id, invite_link: new_team.invite_link}
         else
-          render json: {error: "[901] Record save failed. Verify parameters are correct."}
+          render json: new_team.valid?
+          #render json: {error: "[901] Record save failed. Verify parameters are correct."}
         end
         rescue ActiveRecord::RecordInvalid => invalid
           render json: invalid.record.errors
