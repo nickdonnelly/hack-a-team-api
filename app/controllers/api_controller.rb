@@ -193,10 +193,14 @@ class ApiController < ApplicationController
         new_team.creator = creator_user.id
         new_team.members = [creator_user.id]
         new_team.invite_link = SecureRandom.hex
-        if new_team.save
-          render json: {team_id: new_team.id, invite_link: new_team.invite_link}
-        else
-          render json: {error: "[901] Record save failed. Verify parameters are correct."}
+        begin
+          if new_team.save!
+            render json: {team_id: new_team.id, invite_link: new_team.invite_link}
+          else
+            render json: {error: "[901] Record save failed. Verify parameters are correct."}
+          end
+        rescue ActiveRecord::RecordInvalid => invalid
+          render json: invalid.record.errors
         end
 
       end
