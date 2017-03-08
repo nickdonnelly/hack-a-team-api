@@ -1,24 +1,6 @@
-# README
+# Hack-A-Team API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Simple API to manage teams during competitions, specially made for hackathons.
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+API Description:
+https://drive.google.com/open?id=1D7-lV8XKR0V6Gvi_d9W7Snqywx6NVQawzYOeXgFXOKo
