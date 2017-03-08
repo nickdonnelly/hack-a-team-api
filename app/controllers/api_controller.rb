@@ -35,8 +35,23 @@ class ApiController < ApplicationController
       end
     end
 
-    # Not necessarily correct
+    # Email + passcode to authenticate, return login_identifier after reset
     def login_token_request
+      if params[:email].nil? or params[:passcode]
+        @u = User.find_by(email: params[:email], passcode: params[:passcode])
+
+        if @u.nil?
+          render json: {error: "[102] Record not found"}
+        else
+          @u.login_identifier = SecureRandom.hex # reset the identifier on each login
+          @u.save
+
+          render json: {id: @u.id, login_identifier: @u.login_identifier}
+        end
+
+      end
+
+
       if params[:login_identifier].nil? or params[:apikey].nil? then
         badparams("identifier or apikey")
       else
