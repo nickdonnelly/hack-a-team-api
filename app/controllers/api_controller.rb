@@ -1,10 +1,10 @@
 class ApiController < ApplicationController
 
   protect_from_forgery with: :null_session
-  before_action :fix_headers
-	before_action :check_key
-  before_action :check_valid_login_ident
-  skip_before_action :check_valid_login_ident, only: [:login_token_request]
+  before_action :fix_headers # changes http headers to ignore the origin, prevents source request errors.
+	before_action :check_key # checks api key
+  before_action :check_valid_login_ident # checks login_identifier
+  skip_before_action :check_valid_login_ident, only: [:login_token_request] # skips login_identifer check for the token request action
 
   def fix_headers
     headers["Access-Control-Allow-Origin"] = "*"
@@ -45,8 +45,8 @@ class ApiController < ApplicationController
         else
           @u.login_identifier = SecureRandom.hex # reset the identifier on each login
           @u.save
-
-          render json: {id: @u.id, login_identifier: @u.login_identifier}
+          is_first_login = @u.first_login.nil?
+          render json: {id: @u.id, login_identifier: @u.login_identifier, is_first_login: is_first_login }
         end
 
       end
@@ -165,13 +165,17 @@ class ApiController < ApplicationController
       else
         @user = User.find_by_id(submitted["id"])
         if !(@user.nil?)
-          submitted.each do |key, val|
-            if key != "id" # dont edit the id's, this will throw an activerecord exception
-              @user[key] = val
+          if @user.login_identifier == params[:login_identifier]
+            submitted.each do |key, val|
+              if key != "id" # dont edit the id's, this will throw an activerecord exception
+                @user[key] = val
+              end
             end
+            @user.save
+            render json: submitted
+          else
+            render json: {error: "[103] Login identifiers don't match!"}
           end
-          @user.save
-          render json: submitted
         else
           render json: {error: "[102] Record not found."}
         end
@@ -244,8 +248,7 @@ class ApiController < ApplicationController
       else
         @user = User.find_by(login_identifier: params[:login_identifier])
         if @user.nil? then
-          err = {error: "[900] Bad login identifier. Authentication failed."}
-          render json: err
+          render json: {error: "[900] Bad login identifier. Authentication failed."}
         end
       end
     end
