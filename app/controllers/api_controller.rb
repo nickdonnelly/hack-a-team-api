@@ -37,7 +37,7 @@ class ApiController < ApplicationController
 
   # Email + passcode to authenticate, return login_identifier after reset
   def login_token_request
-    if params[:email].nil? or params[:passcode]
+    if not params[:email].nil? and not params[:passcode].nil?
       @u = User.find_by(email: params[:email], passcode: params[:passcode])
 
       if @u.nil?
@@ -48,19 +48,8 @@ class ApiController < ApplicationController
         is_first_login = @u.first_login.nil?
         render json: {id: @u.id, login_identifier: @u.login_identifier, is_first_login: is_first_login }
       end
-
-    end
-
-
-    if params[:login_identifier].nil? or params[:apikey].nil? then
-      badparams("identifier or apikey")
     else
-      u = User.find_by(login_identifier: params[:login_identifier])
-      if u.nil? 
-        render json: {error: "[900] Bad login identifier. Authentication failed."}
-      else
-        render json: u
-      end
+      badparams("email or passcode")
     end
   end
 
