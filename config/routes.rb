@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       post '/createTeam' => 'api#create_team'
 
       get '/getChallenges' => 'api#get_challenges'
+      get '/getChallengeById' => 'api#get_single_challenge'
       post '/requestLoginToken' => 'api#login_token_request'
     end
   end

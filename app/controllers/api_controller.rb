@@ -4,7 +4,7 @@ class ApiController < ApplicationController
   before_action :fix_headers # changes http headers to ignore the origin, prevents source request errors.
 	before_action :check_key # checks api key
   before_action :check_valid_login_ident # checks login_identifier
-  skip_before_action :check_valid_login_ident, only: [:login_token_request] # skips login_identifer check for the token request action
+  skip_before_action :check_valid_login_ident, only: [:get_single_challenge, :get_challenges, :login_token_request] # skips login_identifer check for the token request action and actions that shouldn't require authentication to use (no database changes).
 
   def fix_headers
     headers["Access-Control-Allow-Origin"] = "*"
@@ -66,6 +66,15 @@ class ApiController < ApplicationController
 
     def get_challenges
       render json: Challenge.all
+    end
+
+    def get_single_challenge
+      if params[:id].nil?
+        badparams("id")
+      else
+        @c = Challenge.find_by(:id => params[:id])
+        render json: @c
+      end
     end
 
     def get_group_list
