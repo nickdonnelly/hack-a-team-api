@@ -36,13 +36,22 @@ namespace :database_init do
       t.invite_link = SecureRandom.hex.truncate(8)
       t.challenge_id = prng.rand(1..3)
       t.contact_email = "team_email@example.com"
-      t.creator = prng.rand(1..(User.count))
+      t.creator = prng.rand(User.sample.id)
       t.members = []
       for j in 1..5 do
-        t.members << prng.rand(1..(User.count))
+        t.members << prng.rand(User.sample.id)
       end
       t.save
     end
+
+  task randomize_passcodes: :environment do
+    prng = Random.new
+    User.all.each do |u|
+      u.passcode = prng.rand(10000..99999) # 5 digits
+      u.save(validate: false)
+    end
+  end
+
 
   end
 
