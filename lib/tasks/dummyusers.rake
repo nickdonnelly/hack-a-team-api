@@ -2,7 +2,7 @@ namespace :database_init do
   names = ["Adella", "Leon", "Marcelene", "Florentina", "Nelle","Mittie", "Germaine","Kurt","Jalisa","Delpha"]
 
 
-
+  desc "TODO"
   task create_dummy_users: :environment do
     prng = Random.new
     for i in 1..20 do
@@ -22,7 +22,7 @@ namespace :database_init do
     end
   end
 
-
+  desc "TODO"
   task create_dummy_teams: :environment do
     prng = Random.new
     for i in 1..20 do
@@ -43,11 +43,13 @@ namespace :database_init do
       end
       t.save
     end
+  end
 
+  desc "TODO"
   task randomize_passcodes: :environment do
     prng = Random.new
     User.all.each do |u|
-      u.passcode = prng.rand(10000..99999) # 5 digits
+      u.passcode = prng.rand(10000..99999).to_s # 5 digits
       u.save(validate: false)
     end
   end
