@@ -45,8 +45,7 @@ class ApiController < ApplicationController
       else
         @u.login_identifier = SecureRandom.hex # reset the identifier on each login
         @u.save
-        is_first_login = @u.first_login.nil?
-        render json: {id: @u.id, login_identifier: @u.login_identifier, is_first_login: is_first_login }
+        render json: @u
       end
     else
       badparams("email or passcode")
