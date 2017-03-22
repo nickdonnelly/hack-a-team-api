@@ -55,7 +55,5 @@ namespace :database_init do
   end
 
 
-  end
-
 
 end
