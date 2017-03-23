@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       post '/editUser' => 'api#edit_user_by_id'
       post '/registerNewUser' => 'api#register_new_user'
       post '/createTeam' => 'api#create_team'
-      post /joinTeam' => 'api#join_team'
+      post '/joinTeam' => 'api#join_team'
 
       get '/getChallenges' => 'api#get_challenges'
       get '/getChallengeById' => 'api#get_single_challenge'
