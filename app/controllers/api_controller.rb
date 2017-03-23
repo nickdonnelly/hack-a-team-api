@@ -236,7 +236,7 @@ class ApiController < ApplicationController
       if t.nil?
         render json: {error: "[102] Record not found."}
       else
-        u = User.find_by(params["userid"])
+        u = User.find_by(id: params["userid"])
         if u.login_identifier != params["login_identifier"]
           render json: {error: "[999] Not authorized!"}
         else
