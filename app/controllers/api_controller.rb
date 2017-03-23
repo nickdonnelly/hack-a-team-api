@@ -228,6 +228,21 @@ class ApiController < ApplicationController
     end
   end
 
+  def join_team
+    if params["invite_link"].nil? or params["userid"].nil? then
+      badparams("userid or invite_link")
+    else
+      t = Team.find_by(invite_link: params["invite_link"])
+      if t.nil?
+        render json: {error: "[102] Record not found."}
+      else
+        t.members << params["userid"].to_i
+        t.save(validate: false)
+        render json: t
+      end
+    end
+  end
+
   private
 
   def check_key
