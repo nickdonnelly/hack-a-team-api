@@ -44,7 +44,7 @@ class ApiController < ApplicationController
         render json: {error: "[102] Record not found"}
       else
         @u.login_identifier = SecureRandom.hex # reset the identifier on each login
-        @u.save
+        @u.save(validate: false)
         render json: @u
       end
     else
