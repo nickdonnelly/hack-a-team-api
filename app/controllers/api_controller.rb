@@ -49,7 +49,7 @@ class ApiController < ApplicationController
       end
 
       if @u.first_login.nil?
-        @u.first_login = Time.now.utc
+        @u.first_login = Time.now.to_i
         @u.save(validate: false)
       end
     else
