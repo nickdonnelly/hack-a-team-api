@@ -47,6 +47,11 @@ class ApiController < ApplicationController
         @u.save(validate: false)
         render json: @u
       end
+
+      if @u.first_login.nil?
+        @u.first_login = Time.now.utc
+        @u.save(validate: false)
+      end
     else
       badparams("email or passcode")
     end
@@ -220,6 +225,8 @@ class ApiController < ApplicationController
       new_team.challenge_id = -1
       
       if new_team.save
+        creator_user.teamid = new_team.id
+        creator_user.save(validate: false)
         render json: {team_id: new_team.id, invite_link: new_team.invite_link}
       else
         render json: {error: "[901] Record save failed. Verify parameters are correct."}
@@ -241,6 +248,8 @@ class ApiController < ApplicationController
           render json: {error: "[999] Not authorized!"}
         else
           t.members << params["userid"].to_i
+          u.teamid = t.id
+          u.save(validate: false)
           t.save(validate: false)
           render json: t
         end
