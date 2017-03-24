@@ -44,14 +44,13 @@ class ApiController < ApplicationController
         render json: {error: "[102] Record not found"}
       else
         @u.login_identifier = SecureRandom.hex # reset the identifier on each login
-        @u.save(validate: false)
         render json: @u
+        if @u.first_login.nil? or @u.first_login == true
+          @u.first_login = false
+        end
+        @u.save(validate: false)
       end
 
-      if @u.first_login.nil?
-        @u.first_login = Time.now.to_i
-        @u.save(validate: false)
-      end
     else
       badparams("email or passcode")
     end
