@@ -97,7 +97,7 @@ class ApiController < ApplicationController
 
   def edit_group_information
     submitted = {}
-    effected_keys = ["id", "team_name", "team_image", "team_link", "video_link", "description", "contact_phone", "contact_email", "challenge_id"]
+    effected_keys = ["id", "team_name", "team_img", "team_link", "video_link", "description", "contact_phone", "contact_email", "challenge_id"]
     params.each do |key, val|
       if(effected_keys.include? key)
         submitted[key] = val
