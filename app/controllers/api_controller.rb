@@ -131,8 +131,10 @@ class ApiController < ApplicationController
         @t.members = @t.members - [@u.id]
         if @t.members.length == 0
           Team.destroy(@t.id) # Deletes teams that have no members.
+          render json: {success: "Team deleted."}
         else
           @t.save(validate: false)
+          render json: @t
         end
       else
         badparams("teamid") #They arent in the team
