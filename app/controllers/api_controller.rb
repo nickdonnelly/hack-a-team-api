@@ -245,8 +245,14 @@ class ApiController < ApplicationController
 
   def create_team
     # required_params = ["team_name", "contact_email", "team_img"]
-    if params["team_name"].nil? or params["contact_email"].nil? or params["team_img"].nil? or params["challenge_id"]
-      badparams()
+    if params["team_name"].nil?
+      badparams("team_name")
+    elsif params["contact_email"].nil?
+      badparams("contact_email")
+    elsif params["team_img"].nil?
+      badparams("team_img")
+    elsif params["challenge_id"]
+      badparams("challenge_id")
     else
       creator_user = User.find_by(login_identifier: params[:login_identifier])
       new_team = Team.new
