@@ -251,7 +251,7 @@ class ApiController < ApplicationController
       badparams("contact_email")
     elsif params["team_img"].nil?
       badparams("team_img")
-    elsif params["challenge_id"]
+    elsif params["challenge_id"].nil?
       badparams("challenge_id")
     else
       creator_user = User.find_by(login_identifier: params[:login_identifier])
