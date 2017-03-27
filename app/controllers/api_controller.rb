@@ -121,6 +121,25 @@ class ApiController < ApplicationController
     end
   end
 
+  def leave_team
+    if params["teamid"].nil?
+      badparams("teamid")
+    else
+      @u = User.find_by(login_identifier: params["login_identifier"])
+      @t = Team.find_by(id: params["teamid"])
+      if @t.members.include? @u.id
+        @t.members = @t.members - [@u.id]
+        if @t.members.length == 0
+          Team.destroy(@t.id) # Deletes teams that have no members.
+        else
+          @t.save(validate: false)
+        end
+      else
+        badparams("teamid") #They arent in the team
+      end
+    end
+  end
+
   # Returns a JSON object containing a single user.
   def get_user_by_id
     if params[:uid].nil?
