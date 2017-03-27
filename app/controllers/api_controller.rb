@@ -4,7 +4,7 @@ class ApiController < ApplicationController
   before_action :fix_headers # changes http headers to ignore the origin, prevents source request errors.
 	before_action :check_key # checks api key
   before_action :check_valid_login_ident # checks login_identifier
-  skip_before_action :check_valid_login_ident, only: [:get_single_challenge, :get_challenges, :login_token_request] # skips login_identifer check for the token request action and actions that shouldn't require authentication to use (no database changes).
+  skip_before_action :check_valid_login_ident, only: [:get_single_challenge, :get_challenges, :login_token_request] # skips login_identifier check for the token request action and actions that shouldn't require authentication to use (no database changes).
 
   def fix_headers
     headers["Access-Control-Allow-Origin"] = "*"
@@ -119,6 +119,22 @@ class ApiController < ApplicationController
         render json: {error: "[102] Record not found."}
       end
     end
+  end
+
+  def delete_user
+    @u = User.find_by(id: params["userid"])
+
+    if @u.nil?
+      badparams("login_identifier")
+    else
+      if(params["login_identifier"] == @u.login_identifier)
+        User.destroy(@u.id) # Force delete item
+        render json: {success: "User was deleted."}
+      else
+        render json: {error: "[999] Not authorized!"}
+      end
+    end
+
   end
 
   def leave_team

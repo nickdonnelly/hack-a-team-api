@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       post '/createTeam' => 'api#create_team'
       post '/joinTeam' => 'api#join_team'
       post '/leaveTeam' => 'api#leave_team'
+      post '/deleteUser' => 'api#delete_user'
 
       get '/getChallenges' => 'api#get_challenges'
       get '/getChallengeById' => 'api#get_single_challenge'
