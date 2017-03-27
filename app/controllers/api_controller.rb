@@ -271,7 +271,7 @@ class ApiController < ApplicationController
       if new_team.save
         creator_user.teamid = new_team.id
         creator_user.save(validate: false)
-        render json: {team_id: new_team.id, invite_link: new_team.invite_link}
+        render json: new_team
       else
         render json: {error: "[901] Record save failed. Verify parameters are correct."}
       end
