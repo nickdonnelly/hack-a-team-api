@@ -128,6 +128,15 @@ class ApiController < ApplicationController
       badparams("login_identifier")
     else
       if(params["login_identifier"] == @u.login_identifier)
+        t = Team.find_by(@u.teamid)
+        if !(t.nil?)
+          t.members = t.members - [@u.id] # remove user from the team they belong to
+          if t.members.length == 0
+            Team.destroy(t.id)
+          else
+            t.save(validate: false)
+          end
+        end
         User.destroy(@u.id) # Force delete item
         render json: {success: "User was deleted."}
       else
