@@ -122,10 +122,10 @@ class ApiController < ApplicationController
   end
 
   def delete_user
-    @u = User.find_by(id: params["userid"])
+    @u = User.find_by(id: params["userid"].to_i)
 
     if @u.nil?
-      badparams("login_identifier")
+      badparams("login_identifier or userid")
     else
       if(params["login_identifier"] == @u.login_identifier)
         t = Team.find_by(@u.teamid)
@@ -347,7 +347,7 @@ class ApiController < ApplicationController
   end
 
   def user_params(params)
-    params.require(:user).permit(:first_name, :last_name, :phone, :team_id, :email, :description, :profile_image, :social_facebook, :social_linked, :social_twitter, :first_login)
+    params.require(:user).permit(:first_name, :last_name, :phone, :team_id, :teamid, :email, :description, :profile_image, :social_facebook, :social_linked, :social_twitter, :first_login)
   end
 
 
