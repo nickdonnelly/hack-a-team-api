@@ -169,6 +169,21 @@ class ApiController < ApplicationController
     end
   end
 
+  def set_user_device_token
+    if params["device_token"].nil?
+      badparams("device_token")
+    else
+      @u = User.find_by(params["login_identifier"])
+      if @u.nil?
+        render json: {error: "[102] Record not found."}
+      else
+        @u.device_token = params["device_token"]
+        @u.save(validate: false)
+        render json: @u
+      end
+    end
+  end
+
   # Returns a JSON object containing a single user.
   def get_user_by_id
     if params[:uid].nil?

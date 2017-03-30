@@ -19,6 +19,8 @@ Rails.application.routes.draw do
       post '/leaveTeam' => 'api#leave_team'
       post '/deleteUser' => 'api#delete_user'
 
+      post '/setUserDeviceToken' => 'api#set_user_device_token'
+
       get '/getChallenges' => 'api#get_challenges'
       get '/getChallengeById' => 'api#get_single_challenge'
       post '/requestLoginToken' => 'api#login_token_request'
