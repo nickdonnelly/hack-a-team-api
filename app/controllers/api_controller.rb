@@ -160,6 +160,10 @@ class ApiController < ApplicationController
           Team.destroy(@t.id) # Deletes teams that have no members.
           render json: {success: "Team deleted."}
         else
+          send_cm_message({
+            data: {"left": u.first_name + " " + u.last_name + " left your team."},
+            to: '/topics/' + t.id
+          })
           @t.save(validate: false)
           render json: @t
         end
@@ -214,6 +218,21 @@ class ApiController < ApplicationController
       end
       render json: @ulist
     end
+  end
+
+  def send_cm_message(data)
+    
+    wapi_key = "AIzaSyCzo1hwNBGT5wA6ty_nKaq_zOmEqsgh6rk" # Firebase API Key.
+    uri = URI.parse("https://fcm.googleapis.com/fcm/send")
+
+    http = Net::HTTP.new(uri.host)
+    http.use_ssl = true
+
+    request = Net::HTTP::Post.new(uri.path, {"Content-Type" => "application/json",
+    "Authorization" => "key="+wapi_key})
+    request.body = data.to_json
+
+    response = http.request(request)
   end
 
   def edit_user_by_id
@@ -319,6 +338,10 @@ class ApiController < ApplicationController
           u.teamid = t.id
           u.save(validate: false)
           t.save(validate: false)
+          send_cm_message({
+            data: {"joined": u.first_name + " " + u.last_name + " joined your team!"},
+            to: '/topics/' + t.id
+          })
           render json: t
         end
       end
