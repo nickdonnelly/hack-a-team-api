@@ -222,7 +222,7 @@ class ApiController < ApplicationController
 
   def send_cm_message(data)
     
-    wapi_key = "AIzaSyCzo1hwNBGT5wA6ty_nKaq_zOmEqsgh6rk" # Firebase API Key.
+    wapi_key = "AIzaSyAcmGfd46rg5oI9cSELU_LI-HOWmhvmxCQ" # Firebase API Key.
     uri = URI.parse("https://fcm.googleapis.com/fcm/send")
 
     http = Net::HTTP.new(uri.host)
