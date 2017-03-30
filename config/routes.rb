@@ -26,4 +26,4 @@ Rails.application.routes.draw do
       post '/requestLoginToken' => 'api#login_token_request'
     end
   end
-end
+end 

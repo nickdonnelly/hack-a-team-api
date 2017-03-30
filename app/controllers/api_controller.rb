@@ -173,7 +173,7 @@ class ApiController < ApplicationController
     if params["device_token"].nil?
       badparams("device_token")
     else
-      @u = User.find_by(params["login_identifier"])
+      @u = User.find_by(login_identifier: params["login_identifier"])
       if @u.nil?
         render json: {error: "[102] Record not found."}
       else
