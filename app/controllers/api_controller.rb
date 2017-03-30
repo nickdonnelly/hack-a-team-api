@@ -161,7 +161,7 @@ class ApiController < ApplicationController
           render json: {success: "Team deleted."}
         else
           send_cm_message({
-            data: {"left": u.first_name + " " + u.last_name + " left your team."},
+            data: {"left": @u.first_name + " " + @u.last_name + " left your team."},
             to: '/topics/' + t.id
           })
           @t.save(validate: false)
