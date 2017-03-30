@@ -226,7 +226,6 @@ class ApiController < ApplicationController
     uri = URI.parse("https://fcm.googleapis.com/fcm/send")
 
     http = Net::HTTP.new(uri.host)
-    http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri.path, {"Content-Type" => "application/json",
     "Authorization" => "key="+wapi_key})
