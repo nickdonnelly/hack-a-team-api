@@ -161,7 +161,7 @@ class ApiController < ApplicationController
           render json: {success: "Team deleted."}
         else
           send_cm_message({
-            data: {"left": @u.first_name + " " + @u.last_name + " left your team."},
+            data: {"left": @u.first_name + " " + @u.last_name + " left your team.", "teamid": @t.id},
             to: '/topics/' + @t.id.to_s
           })
           @t.save(validate: false)
@@ -338,7 +338,7 @@ class ApiController < ApplicationController
           u.save(validate: false)
           t.save(validate: false)
           send_cm_message({
-            data: {"joined": u.first_name + " " + u.last_name + " joined your team!"},
+            data: {"joined": u.first_name + " " + u.last_name + " joined your team!", "teamid": t.id},
             to: '/topics/' + t.id.to_s
           })
           render json: t
