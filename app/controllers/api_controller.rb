@@ -303,7 +303,7 @@ class ApiController < ApplicationController
       new_team.team_img = params["team_img"]
       new_team.creator = creator_user.id
       new_team.members = [creator_user.id]
-      new_team.invite_link = SecureRandom.hex
+      new_team.invite_link = SecureRandom.hex[0..5]
       new_team.team_link = ""
       new_team.video_link = ""
       new_team.description = ""
