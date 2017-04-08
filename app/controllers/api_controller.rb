@@ -151,24 +151,26 @@ class ApiController < ApplicationController
       badparams("teamid")
     else
       @u = User.find_by(login_identifier: params["login_identifier"])
-      @t = Team.find_by(id: params["teamid"])
-      if @t.members.include? @u.id
-        @t.members = @t.members - [@u.id]
-        @u.teamid = nil
-        @u.save(validate: false)
-        if @t.members.length == 0
-          Team.destroy(@t.id) # Deletes teams that have no members.
-          render json: {success: "Team deleted."}
+      @t = Team.find_by(id: params["teamid"].to_i)
+      if !@t.nil?
+        if @t.members.include? @u.id
+          @t.members = @t.members - [@u.id]
+          @u.teamid = nil
+          @u.save(validate: false)
+          if @t.members.length == 0
+            Team.destroy(@t.id) # Deletes teams that have no members.
+            render json: {success: "Team deleted."}
+          else
+            send_cm_message({
+              data: {"left": @u.first_name + " " + @u.last_name + " left your team.", "teamid": @t.id},
+              to: '/topics/' + @t.id.to_s
+            })
+            @t.save(validate: false)
+            render json: @t
+          end
         else
-          send_cm_message({
-            data: {"left": @u.first_name + " " + @u.last_name + " left your team.", "teamid": @t.id},
-            to: '/topics/' + @t.id.to_s
-          })
-          @t.save(validate: false)
-          render json: @t
+          badparams("teamid") #They arent in the team
         end
-      else
-        badparams("teamid") #They arent in the team
       end
     end
   end
