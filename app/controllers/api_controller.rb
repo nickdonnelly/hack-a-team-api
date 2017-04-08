@@ -171,6 +171,8 @@ class ApiController < ApplicationController
         else
           badparams("teamid") #They arent in the team
         end
+      else
+        badparams("teamid")
       end
     end
   end
