@@ -253,7 +253,7 @@ class ApiController < ApplicationController
               @user[key] = val
             end
           end
-          @user.save
+          @user.save(validate: false)
           render json: submitted
         else
           render json: {error: "[103] Login identifiers don't match!"}
