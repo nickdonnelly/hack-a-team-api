@@ -128,7 +128,7 @@ class ApiController < ApplicationController
       badparams("login_identifier or userid")
     else
       if(params["login_identifier"] == @u.login_identifier)
-        t = Team.find_by(@u.teamid)
+        t = Team.find_by(id: @u.teamid.to_i)
         if !(t.nil?)
           t.members = t.members - [@u.id] # remove user from the team they belong to
           if t.members.length == 0
